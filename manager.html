@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>标签组管理</title>
+  <link rel="stylesheet" href="manager.css">
+</head>
+<body>
+  <div class="manager-container">
+    <!-- 左侧面板：标签组列表 -->
+    <div class="left-panel">
+      <div class="panel-header">
+        <h2>标签组列表</h2>
+        <div class="stats-bar">
+          <span class="stat-item">分类(<span id="categoryCount">0</span>)</span>
+          <span class="stat-item">标签组(<span id="groupCount">0</span>)</span>
+          <span class="stat-item">标签页(<span id="tabCount">0</span>)</span>
+        </div>
+      </div>
+      
+      <div class="action-bar">
+        <button class="btn-action" id="expandAllBtn">全部展开</button>
+        <button class="btn-action" id="collapseAllBtn">全部折叠</button>
+        <button class="btn-action" id="createCategoryBtn">创建分类</button>
+        <button class="btn-action" id="toggleViewBtn" title="切换当前/历史视图">📜 历史</button>
+        <button class="btn-more" id="moreOptionsBtn">⋯</button>
+      </div>
+      
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="搜索分类/标签组" class="search-input">
+      </div>
+      
+      <div class="tag-groups-list" id="tagGroupsList">
+        <!-- 动态生成的标签组列表 -->
+      </div>
+    </div>
+    
+    <!-- 右侧面板：选中标签组的内容 -->
+    <div class="right-panel">
+      <div class="panel-header">
+        <div class="current-category-stats">
+          <span>当前分类统计: 标签组(<span id="currentGroupCount">0</span>) 标签页(<span id="currentTabCount">0</span>)</span>
+        </div>
+      </div>
+      
+      <div class="selected-group-header" id="selectedGroupHeader" style="display: none;">
+        <div class="group-title-section">
+          <span class="group-icon" id="groupIcon">📁</span>
+          <div class="group-title-info">
+            <h3 id="selectedGroupTitle">未选择标签组</h3>
+            <div class="group-meta">
+              <span id="selectedGroupTabCount">0个标签页</span>
+              <span class="separator">•</span>
+              <span id="selectedGroupTime">--</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group-actions-bar">
+          <a href="#" class="action-link" id="deleteGroupLink">删除该组</a>
+          <a href="#" class="action-link" id="openGroupLink">打开该组</a>
+          <a href="#" class="action-link" id="lockGroupLink">锁定该组</a>
+          <a href="#" class="action-link" id="starGroupLink">星标该组</a>
+          <a href="#" class="action-link" id="moveToLink">移动到</a>
+          <a href="#" class="action-link" id="copyLinkLink">复制链接</a>
+          <a href="#" class="action-link" id="deduplicateLink">去重</a>
+          <a href="#" class="action-link" id="moreActionsLink">更多</a>
+        </div>
+        
+        <div class="selection-counter">
+          <span id="selectionCounter">0/0</span>
+        </div>
+      </div>
+      
+      <div class="tabs-list-container" id="tabsListContainer">
+        <div class="empty-state" id="emptyState">
+          <p>请从左侧选择一个标签组</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 右侧边栏：控制按钮 -->
+    <div class="sidebar">
+      <button class="sidebar-btn" id="togglePanelsBtn" title="折叠/展开面板">
+        <span>⇄</span>
+      </button>
+      <button class="sidebar-btn" id="searchBtn" title="搜索">
+        <span>🔍</span>
+      </button>
+      <button class="sidebar-btn" id="sortAscBtn" title="升序排序">
+        <span>↑1</span>
+      </button>
+      <button class="sidebar-btn" id="sortDescBtn" title="降序排序">
+        <span>↓2</span>
+      </button>
+      <button class="sidebar-btn" id="refreshBtn" title="刷新">
+        <span>↻</span>
+      </button>
+      <button class="sidebar-btn" id="addBtn" title="添加">
+        <span>+</span>
+      </button>
+    </div>
+  </div>
+  
+  <!-- 模态框：创建分类 -->
+  <div class="modal" id="createCategoryModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>创建分类</h2>
+        <button class="close-btn" id="closeCategoryModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>分类名称:</label>
+          <input type="text" id="categoryNameInput" class="form-input" placeholder="输入分类名称">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancelCategoryBtn">取消</button>
+        <button class="btn-primary" id="confirmCategoryBtn">创建</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="manager.js"></script>
+</body>
+</html>
+

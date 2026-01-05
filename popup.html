@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>标签页分组管理器</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 主视图 -->
+    <div class="main-view" id="mainView">
+      <header class="header">
+        <h1>📁 标签页分组管理</h1>
+      </header>
+
+      <!-- 快速操作区域 -->
+      <div class="quick-actions">
+        <button id="addToGroupBtn" class="btn-primary">➕ 添加到群组</button>
+        <button id="createGroupBtn" class="btn-secondary">✨ 新建群组</button>
+        <button id="openManagerBtn" class="btn-secondary">📊 管理页面</button>
+      </div>
+
+      <!-- 当前标签页信息 -->
+      <div class="current-tab-info" id="currentTabInfo">
+        <div class="info-item">
+          <span class="label">当前标签页:</span>
+          <span class="value" id="currentTabTitle">加载中...</span>
+        </div>
+      </div>
+
+      <!-- 群组列表 -->
+      <div class="groups-section">
+        <h2>📂 现有群组</h2>
+        <div class="groups-container" id="groupsContainer">
+          <div class="empty-state" id="emptyState">
+            <p>还没有群组</p>
+            <p class="hint">点击"新建群组"创建第一个群组</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 详情视图 -->
+    <div class="detail-view" id="detailView" style="display: none;">
+      <header class="detail-header">
+        <button id="backBtn" class="btn-back">← 返回</button>
+        <h2 id="detailGroupName">群组详情</h2>
+      </header>
+
+      <div class="detail-stats" id="detailStats">
+        <span id="detailTabCount">0 个标签页</span>
+        <span id="detailLastUpdate"></span>
+      </div>
+
+      <div class="detail-actions">
+        <button id="openGroupBtn" class="btn-action">打开该组</button>
+        <button id="deleteGroupBtn2" class="btn-action btn-danger">删除该组</button>
+        <button id="editGroupBtn2" class="btn-action">编辑</button>
+      </div>
+
+      <div class="detail-tabs-section">
+        <div class="detail-tabs-header">
+          <h3>标签页列表</h3>
+          <div class="detail-tabs-count" id="detailTabsCount">0/0</div>
+        </div>
+        <div class="detail-tabs-container" id="detailTabsContainer">
+          <div class="loading">加载中...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加到群组模态框 -->
+  <div class="modal" id="addToGroupModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>添加到群组</h2>
+        <button class="close-btn" id="closeAddModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>选择群组:</label>
+          <select id="groupSelect" class="form-select">
+            <option value="">-- 选择群组 --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>或创建新群组:</label>
+          <input type="text" id="newGroupName" class="form-input" placeholder="输入群组名称">
+        </div>
+        <div class="form-group">
+          <label>选择颜色:</label>
+          <div class="color-picker" id="colorPicker">
+            <div class="color-option" data-color="grey" style="background-color: #9AA0A6;"></div>
+            <div class="color-option" data-color="blue" style="background-color: #8AB4F8;"></div>
+            <div class="color-option" data-color="red" style="background-color: #F28B82;"></div>
+            <div class="color-option" data-color="yellow" style="background-color: #FDD663;"></div>
+            <div class="color-option" data-color="green" style="background-color: #81C995;"></div>
+            <div class="color-option" data-color="pink" style="background-color: #FF8BCB;"></div>
+            <div class="color-option" data-color="purple" style="background-color: #C58AF9;"></div>
+            <div class="color-option" data-color="cyan" style="background-color: #78D9EC;"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>要添加的标签页:</label>
+          <div class="selected-tabs" id="selectedTabs"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancelAddBtn">取消</button>
+        <button class="btn-primary" id="confirmAddBtn">确认添加</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 创建群组模态框 -->
+  <div class="modal" id="createGroupModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>创建新群组</h2>
+        <button class="close-btn" id="closeCreateModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>群组名称:</label>
+          <input type="text" id="createGroupName" class="form-input" placeholder="输入群组名称">
+        </div>
+        <div class="form-group">
+          <label>选择颜色:</label>
+          <div class="color-picker" id="createColorPicker">
+            <div class="color-option active" data-color="grey" style="background-color: #9AA0A6;"></div>
+            <div class="color-option" data-color="blue" style="background-color: #8AB4F8;"></div>
+            <div class="color-option" data-color="red" style="background-color: #F28B82;"></div>
+            <div class="color-option" data-color="yellow" style="background-color: #FDD663;"></div>
+            <div class="color-option" data-color="green" style="background-color: #81C995;"></div>
+            <div class="color-option" data-color="pink" style="background-color: #FF8BCB;"></div>
+            <div class="color-option" data-color="purple" style="background-color: #C58AF9;"></div>
+            <div class="color-option" data-color="cyan" style="background-color: #78D9EC;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancelCreateBtn">取消</button>
+        <button class="btn-primary" id="confirmCreateBtn">创建</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 群组管理模态框 -->
+  <div class="modal" id="manageGroupModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="manageGroupTitle">管理群组</h2>
+        <button class="close-btn" id="closeManageModal">&times;</button>
+      </div>
+      <div class="modal-body" id="manageGroupBody">
+        <!-- 动态内容 -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-danger" id="deleteGroupBtn">删除群组</button>
+        <button class="btn-secondary" id="cancelManageBtn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
